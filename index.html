@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=500" />
 </head>
 <body>
   <main class="app-shell">
@@ -24,7 +24,7 @@
         <a class="nav-item" href="#notes"><span class="nav-icon">≡</span> Family notes</a>
       </nav>
       <div class="sidebar-bottom">
-        <div class="storage"><div class="storage-label"><span>Tree storage</span><span>68%</span></div><div class="storage-track"><span></span></div><small>34 of 50 people added</small></div>
+        <div class="storage"><div class="storage-label"><span>Tree storage</span><span>100%</span></div><div class="storage-track"><span style="width:100%"></span></div><small>500 of 500 people added</small></div>
         <a class="nav-item" href="#settings"><span class="nav-icon">⚙</span> Settings</a>
         <div class="profile"><div class="avatar avatar-small avatar-gold">AM</div><div><strong>Alex Morgan</strong><small>Owner</small></div><span class="more">•••</span></div>
       </div>
@@ -37,7 +37,7 @@
       <section class="tree-stage" aria-label="Morgan family tree">
         <div class="stage-grid"></div><div class="generation-label gen-one">GRANDPARENTS</div><div class="generation-label gen-two">PARENTS</div><div class="generation-label gen-three">YOU &amp; SIBLINGS</div>
         <svg class="connections" viewBox="0 0 1000 650" preserveAspectRatio="none" aria-hidden="true"><path d="M265 150 V218 H500 V245"/><path d="M735 150 V218 H500"/><path d="M500 335 V390 H245 V422"/><path d="M500 390 H755 V422"/><path d="M245 512 V550 H150 V568"/><path d="M245 550 H340 V568"/><path d="M755 512 V568"/></svg>
-        <div class="tree-canvas" id="tree-canvas">
+        <div class="tree-canvas" id="tree-canvas" aria-label="500 family members">
           <article class="person-card card-margaret" data-person="Margaret Morgan"><div class="avatar avatar-rose">MM</div><div class="person-copy"><strong>Margaret Morgan</strong><span>1928 – 2013</span><em>Grandmother</em></div><button class="card-menu">•••</button></article>
           <article class="person-card card-arthur" data-person="Arthur Morgan"><div class="avatar avatar-blue">AM</div><div class="person-copy"><strong>Arthur Morgan</strong><span>1925 – 2008</span><em>Grandfather</em></div><button class="card-menu">•••</button></article>
           <article class="person-card card-elizabeth" data-person="Elizabeth Morgan"><div class="avatar avatar-lilac">EM</div><div class="person-copy"><strong>Elizabeth Morgan</strong><span>1952 – 2020</span><em>Mother</em></div><button class="card-menu">•••</button></article>
@@ -55,6 +55,6 @@
   </main>
   <dialog id="person-dialog"><form method="dialog" id="person-form"><button class="dialog-close" value="cancel">×</button><span class="eyebrow">NEW CONNECTION</span><h2>Add family member</h2><p>Place someone new in the Morgan family tree.</p><label>Full name<input id="name-input" required placeholder="e.g. Jordan Morgan"></label><label>Relationship<select id="relation-input"><option>Parent</option><option>Sibling</option><option>Child</option><option>Partner</option><option>Grandparent</option></select></label><label>Birth date<input id="birth-input" type="date" required></label><div class="dialog-actions"><button class="button button-quiet" value="cancel">Cancel</button><button class="button button-dark" value="default">Add person</button></div></form></dialog>
   <section class="gallery-strip" id="gallery"><div><span class="eyebrow">FAMILY GALLERY</span><h2>Moments worth keeping</h2></div><div class="gallery-photos"><div class="gallery-photo photo-one"><span>Summer in Brighton</span></div><div class="gallery-photo photo-two"><span>Christmas, 1998</span></div><div class="gallery-photo photo-three"><span>At the old house</span></div><button class="gallery-more">＋<small>Add memory</small></button></div></section>
-  <script src="script.js"></script>
+  <script src="script.js?v=500"></script>
 </body>
 </html>

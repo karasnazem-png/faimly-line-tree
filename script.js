@@ -6,17 +6,42 @@ let zoom = 1;
 let selectedCard = document.querySelector('.person-card.selected');
 let audioContext;
 let musicNodes;
+const totalPeople = 500;
+document.querySelector('#music-toggle').title = 'Play relaxing ambient music';
+document.querySelector('#music-toggle span').textContent = 'Relaxing';
+
+function selectCard(card) {
+  document.querySelector('.person-card.selected')?.classList.remove('selected');
+  card.classList.add('selected');
+  selectedCard = card;
+  document.querySelector('#detail-name').textContent = card.dataset.person;
+  document.querySelector('#detail-relation').textContent = card.querySelector('em').textContent + ' · ' + card.querySelector('span').textContent;
+  document.querySelector('.detail-panel').scrollTo({ top: 0, behavior: 'smooth' });
+}
 
 document.querySelectorAll('.person-card:not(.add-card)').forEach((card) => {
-  card.addEventListener('click', () => {
-    document.querySelector('.person-card.selected')?.classList.remove('selected');
-    card.classList.add('selected');
-    selectedCard = card;
-    document.querySelector('#detail-name').textContent = card.dataset.person;
-    document.querySelector('#detail-relation').textContent = card.querySelector('em').textContent + ' · ' + card.querySelector('span').textContent;
-    document.querySelector('.detail-panel').scrollTo({ top: 0, behavior: 'smooth' });
-  });
+  card.addEventListener('click', () => selectCard(card));
 });
+
+const familyNames = ['Morgan', 'Hayes', 'Bennett', 'Ellis', 'Reed', 'Parker', 'Carter', 'Wells'];
+const givenNames = ['Avery', 'Riley', 'Jordan', 'Quinn', 'Taylor', 'Casey', 'Robin', 'Jamie', 'Skyler', 'Drew'];
+const relationships = ['Cousin', 'Aunt', 'Uncle', 'Relative', 'Child'];
+for (let index = 7; index < totalPeople; index += 1) {
+  const card = document.createElement('article');
+  const name = `${givenNames[index % givenNames.length]} ${familyNames[index % familyNames.length]} ${Math.floor(index / givenNames.length) + 1}`;
+  const initials = name.split(' ').map((part) => part[0]).join('').slice(0, 2);
+  card.className = `person-card generated-card avatar-set-${index % 6}`;
+  card.dataset.person = name;
+  card.style.left = `${24 + (index % 10) * 220}px`;
+  card.style.top = `${760 + Math.floor((index - 7) / 10) * 125}px`;
+  card.innerHTML = `<div class="avatar">${initials}</div><div class="person-copy"><strong>${name}</strong><span>${1950 + index % 66}</span><em>${relationships[index % relationships.length]}</em></div><button class="card-menu">•••</button>`;
+  canvas.append(card);
+  card.addEventListener('click', () => selectCard(card));
+}
+document.querySelector('.storage small').textContent = `${totalPeople} of ${totalPeople} people added`;
+document.querySelector('.storage-label span:last-child').textContent = '100%';
+document.querySelector('.storage-track span').style.width = '100%';
+canvas.style.height = `${760 + Math.ceil((totalPeople - 7) / 10) * 125}px`;
 
 function openDialog() { dialog.showModal(); document.querySelector('#name-input').focus(); }
 document.querySelector('#add-person').addEventListener('click', openDialog);
