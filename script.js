@@ -8,7 +8,10 @@ let audioContext;
 let musicNodes;
 const totalPeople = 500;
 const archivedPeople = JSON.parse(localStorage.getItem('kinship-archive') || '[]');
-document.querySelector('#music-toggle').title = 'Play relaxing ambient music';
+const treeStage = document.querySelector('.tree-stage');
+let dragState = null;
+let didPan = false;
+document.querySelector('#music-toggle').title = 'Play 10-track relaxing ambient music';
 document.querySelector('#music-toggle span').textContent = 'Relaxing';
 
 function selectCard(card) {
@@ -21,7 +24,7 @@ function selectCard(card) {
 }
 
 document.querySelectorAll('.person-card:not(.add-card)').forEach((card) => {
-  card.addEventListener('click', () => selectCard(card));
+  card.addEventListener('click', () => { if (!didPan) selectCard(card); });
 });
 
 const familyNames = ['Morgan', 'Hayes', 'Bennett', 'Ellis', 'Reed', 'Parker', 'Carter', 'Wells'];
@@ -37,12 +40,35 @@ for (let index = 7; index < totalPeople; index += 1) {
   card.style.top = `${760 + Math.floor((index - 7) / 10) * 125}px`;
   card.innerHTML = `<div class="avatar">${initials}</div><div class="person-copy"><strong>${name}</strong><span>${1950 + index % 66}</span><em>${relationships[index % relationships.length]}</em></div><button class="card-menu">•••</button>`;
   canvas.append(card);
-  card.addEventListener('click', () => selectCard(card));
+  card.addEventListener('click', () => { if (!didPan) selectCard(card); });
 }
 document.querySelector('.storage small').textContent = `${totalPeople} of ${totalPeople} people added`;
 document.querySelector('.storage-label span:last-child').textContent = '100%';
 document.querySelector('.storage-track span').style.width = '100%';
 canvas.style.height = `${760 + Math.ceil((totalPeople - 7) / 10) * 125}px`;
+treeStage.addEventListener('pointerdown', (event) => {
+  if (event.button !== 0) return;
+  dragState = { x: event.clientX, y: event.clientY, left: treeStage.scrollLeft, top: treeStage.scrollTop };
+  didPan = false;
+  treeStage.classList.add('is-panning');
+  treeStage.setPointerCapture(event.pointerId);
+});
+treeStage.addEventListener('pointermove', (event) => {
+  if (!dragState) return;
+  const distance = Math.abs(event.clientX - dragState.x) + Math.abs(event.clientY - dragState.y);
+  if (distance > 6) didPan = true;
+  treeStage.scrollLeft = dragState.left - (event.clientX - dragState.x);
+  treeStage.scrollTop = dragState.top - (event.clientY - dragState.y);
+});
+function stopPanning(event) {
+  if (!dragState) return;
+  dragState = null;
+  treeStage.classList.remove('is-panning');
+  if (event?.pointerId !== undefined && treeStage.hasPointerCapture(event.pointerId)) treeStage.releasePointerCapture(event.pointerId);
+  setTimeout(() => { didPan = false; }, 120);
+}
+treeStage.addEventListener('pointerup', stopPanning);
+treeStage.addEventListener('pointercancel', stopPanning);
 
 function renderArchive() {
   const list = document.querySelector('#leaderboard-list');
@@ -123,14 +149,31 @@ document.querySelector('#help-toggle').addEventListener('click', () => { helpPan
 document.querySelector('#help-close').addEventListener('click', () => helpPanel.classList.remove('open'));
 document.querySelectorAll('.help-suggestions button').forEach((button) => button.addEventListener('click', () => answerHelp(button.dataset.question)));
 document.querySelector('#help-form').addEventListener('submit', (event) => { event.preventDefault(); answerHelp(helpInput.value); helpInput.select(); });
+const musicTracks = [
+  { pad: [130.81, 196, 261.63], melody: [523.25, 587.33, 659.25, 783.99] },
+  { pad: [146.83, 220, 293.66], melody: [587.33, 659.25, 739.99, 880] },
+  { pad: [164.81, 246.94, 329.63], melody: [659.25, 739.99, 830.61, 987.77] },
+  { pad: [174.61, 261.63, 349.23], melody: [698.46, 783.99, 880, 1046.5] },
+  { pad: [196, 293.66, 392], melody: [783.99, 880, 987.77, 1174.66] },
+  { pad: [220, 329.63, 440], melody: [880, 987.77, 1108.73, 1318.51] },
+  { pad: [246.94, 369.99, 493.88], melody: [987.77, 1108.73, 1244.51, 1479.98] },
+  { pad: [261.63, 392, 523.25], melody: [1046.5, 1174.66, 1318.51, 1567.98] },
+  { pad: [293.66, 440, 587.33], melody: [1174.66, 1318.51, 1479.98, 1760] },
+  { pad: [329.63, 493.88, 659.25], melody: [1318.51, 1479.98, 1661.22, 1975.53] }
+];
+let musicTrackIndex = 0;
+let musicRotationTimer;
+function stopMusic() {
+  if (!musicNodes) return;
+  musicNodes.oscillators.forEach((node) => { try { node.stop(); } catch {} });
+  clearInterval(musicNodes.melodyTimer);
+  clearTimeout(musicRotationTimer);
+  musicNodes = null;
+  document.querySelector('#music-toggle').classList.remove('playing');
+  document.querySelector('#music-stop').classList.remove('active');
+}
 function startMusic(event) {
-  if (musicNodes) {
-    musicNodes.oscillators.forEach((node) => node.stop());
-    clearInterval(musicNodes.melodyTimer);
-    musicNodes = null;
-    event.currentTarget.classList.remove('playing');
-    return;
-  }
+  if (musicNodes) { stopMusic(); return; }
   const AudioContextClass = window.AudioContext || window.webkitAudioContext;
   if (!AudioContextClass) {
     window.alert('Music is not supported in this browser. Try Chrome, Edge, or Safari.');
@@ -141,14 +184,16 @@ function startMusic(event) {
   const masterGain = audioContext.createGain();
   masterGain.gain.value = .12;
   masterGain.connect(audioContext.destination);
-  const padNotes = [130.81, 196, 261.63];
+  const track = musicTracks[musicTrackIndex];
+  musicTrackIndex = (musicTrackIndex + 1) % musicTracks.length;
+  const padNotes = track.pad;
   const oscillators = padNotes.map((frequency) => {
     const oscillator = audioContext.createOscillator();
     const gain = audioContext.createGain();
     oscillator.type = 'sine'; oscillator.frequency.value = frequency; gain.gain.value = .025;
     oscillator.connect(gain).connect(masterGain); oscillator.start(); return oscillator;
   });
-  const melody = [523.25, 587.33, 659.25, 783.99, 659.25, 587.33, 523.25, 440];
+  const melody = track.melody;
   let melodyIndex = 0;
   const playNote = () => {
     const oscillator = audioContext.createOscillator();
@@ -167,12 +212,14 @@ function startMusic(event) {
   playNote();
   const melodyTimer = setInterval(playNote, 2600);
   musicNodes = { oscillators, melodyTimer };
+  musicRotationTimer = setTimeout(() => { stopMusic(); startMusic({ currentTarget: document.querySelector('#music-toggle') }); }, 120000);
   event.currentTarget.classList.add('playing');
+  document.querySelector('#music-stop').classList.add('active');
 }
 document.querySelector('#music-toggle').addEventListener('click', (event) => {
-  if (musicNodes) { startMusic(event); return; }
   startMusic(event);
 });
+document.querySelector('#music-stop').addEventListener('click', stopMusic);
 window.addEventListener('pointerdown', (event) => {
   if (!event.target.closest('#music-toggle') && !musicNodes) startMusic({ currentTarget: document.querySelector('#music-toggle') });
 }, { once: true });
