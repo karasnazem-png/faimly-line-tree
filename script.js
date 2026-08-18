@@ -6,12 +6,20 @@ let zoom = .75;
 let selectedCard = null;
 let audioContext;
 let musicNodes;
-const totalPeople = 0;
+const totalPeople = 1;
 const archivedPeople = JSON.parse(localStorage.getItem('kinship-archive') || '[]');
 const treeStage = document.querySelector('.tree-stage');
 let dragState = null;
 let didPan = false;
 document.querySelectorAll('.person-card:not(.add-card)').forEach((card) => card.remove());
+const meCard = document.createElement('article');
+meCard.className = 'person-card selected root-person';
+meCard.dataset.person = 'Me';
+meCard.style.left = '1151px';
+meCard.style.top = '220px';
+meCard.innerHTML = '<div class="avatar">ME</div><div class="person-copy"><strong>Me</strong><span>2000</span><em>You</em></div><button class="card-menu">•••</button>';
+canvas.append(meCard);
+selectedCard = meCard;
 document.querySelector('#music-toggle').title = 'Play 10-track relaxing ambient music';
 document.querySelector('#music-toggle span').textContent = 'Relaxing';
 
@@ -42,6 +50,7 @@ function bindPersonCard(card) {
 document.querySelectorAll('.person-card:not(.add-card)').forEach((card) => {
   bindPersonCard(card);
 });
+selectCard(meCard);
 
 const familyNames = ['Morgan', 'Hayes', 'Bennett', 'Ellis', 'Reed', 'Parker', 'Carter', 'Wells'];
 const givenNames = ['Avery', 'Riley', 'Jordan', 'Quinn', 'Taylor', 'Casey', 'Robin', 'Jamie', 'Skyler', 'Drew'];
