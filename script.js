@@ -7,6 +7,7 @@ let selectedCard = document.querySelector('.person-card.selected');
 let audioContext;
 let musicNodes;
 const totalPeople = 500;
+const archivedPeople = JSON.parse(localStorage.getItem('kinship-archive') || '[]');
 document.querySelector('#music-toggle').title = 'Play relaxing ambient music';
 document.querySelector('#music-toggle span').textContent = 'Relaxing';
 
@@ -42,6 +43,13 @@ document.querySelector('.storage small').textContent = `${totalPeople} of ${tota
 document.querySelector('.storage-label span:last-child').textContent = '100%';
 document.querySelector('.storage-track span').style.width = '100%';
 canvas.style.height = `${760 + Math.ceil((totalPeople - 7) / 10) * 125}px`;
+
+function renderArchive() {
+  const list = document.querySelector('#leaderboard-list');
+  document.querySelector('#archive-count').textContent = archivedPeople.length;
+  list.innerHTML = archivedPeople.length ? archivedPeople.map((person, index) => `<li><span class="archive-rank">${index + 1}</span><span class="archive-avatar">${person.initials}</span><span><strong>${person.name}</strong><small>${person.relation}</small></span></li>`).join('') : '<li class="leaderboard-empty">No archived members yet</li>';
+}
+renderArchive();
 
 function openDialog() { dialog.showModal(); document.querySelector('#name-input').focus(); }
 document.querySelector('#add-person').addEventListener('click', openDialog);
@@ -83,6 +91,13 @@ function deleteSelectedPerson() {
     return;
   }
   if (!window.confirm(`Delete ${selectedCard.dataset.person} from this tree?`)) return;
+  archivedPeople.unshift({
+    name: selectedCard.dataset.person,
+    initials: selectedCard.querySelector('.avatar').textContent,
+    relation: selectedCard.querySelector('em').textContent
+  });
+  localStorage.setItem('kinship-archive', JSON.stringify(archivedPeople));
+  renderArchive();
   selectedCard.remove();
   selectedCard = null;
   document.querySelector('#detail-name').textContent = 'No person selected';
@@ -90,6 +105,24 @@ function deleteSelectedPerson() {
 }
 document.querySelector('#delete-person').addEventListener('click', deleteSelectedPerson);
 document.querySelector('#delete-person-panel').addEventListener('click', deleteSelectedPerson);
+const helpPanel = document.querySelector('#help-panel');
+const helpInput = document.querySelector('#help-input');
+const helpAnswer = document.querySelector('#help-answer');
+const helpAnswers = [
+  { matches: ['add', 'person', 'someone'], answer: 'Choose Add person in the top bar or the large card in the tree, then enter a name, relationship, and birth date.' },
+  { matches: ['delet', 'archive', 'leader'], answer: 'Deleted members are remembered in the Family Archive at the bottom of the left sidebar. They stay there after removal.' },
+  { matches: ['music', 'relax', 'sound'], answer: 'Press Relaxing in the top bar to start or stop the gentle ambient music.' },
+  { matches: ['find', 'search', 'relative'], answer: 'Use the tree scroll area to browse all 500 people, then select a card to see its details.' }
+];
+function answerHelp(question) {
+  const normalized = question.toLowerCase();
+  const result = helpAnswers.find((item) => item.matches.some((word) => normalized.includes(word)));
+  helpAnswer.textContent = result?.answer || 'I can help with adding people, deleted members, music, and finding relatives in your tree.';
+}
+document.querySelector('#help-toggle').addEventListener('click', () => { helpPanel.classList.toggle('open'); if (helpPanel.classList.contains('open')) helpInput.focus(); });
+document.querySelector('#help-close').addEventListener('click', () => helpPanel.classList.remove('open'));
+document.querySelectorAll('.help-suggestions button').forEach((button) => button.addEventListener('click', () => answerHelp(button.dataset.question)));
+document.querySelector('#help-form').addEventListener('submit', (event) => { event.preventDefault(); answerHelp(helpInput.value); helpInput.select(); });
 function startMusic(event) {
   if (musicNodes) {
     musicNodes.oscillators.forEach((node) => node.stop());
