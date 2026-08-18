@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=500" />
+  <link rel="stylesheet" href="styles.css?v=501" />
 </head>
 <body>
   <main class="app-shell">
@@ -38,7 +38,7 @@
       <section class="tree-stage" aria-label="Morgan family tree">
         <div class="stage-grid"></div><div class="generation-label gen-one">GRANDPARENTS</div><div class="generation-label gen-two">PARENTS</div><div class="generation-label gen-three">YOU &amp; SIBLINGS</div>
         <svg class="connections" viewBox="0 0 1000 650" preserveAspectRatio="none" aria-hidden="true"><path d="M265 150 V218 H500 V245"/><path d="M735 150 V218 H500"/><path d="M500 335 V390 H245 V422"/><path d="M500 390 H755 V422"/><path d="M245 512 V550 H150 V568"/><path d="M245 550 H340 V568"/><path d="M755 512 V568"/></svg>
-        <div class="tree-background-photo" aria-hidden="true"></div><div class="tree-canvas" id="tree-canvas" aria-label="500 family members">
+        <div class="tree-background-photo" aria-hidden="true"></div><div class="pan-hint" aria-hidden="true">↔ Drag to explore the 500-person tree</div><div class="tree-canvas" id="tree-canvas" aria-label="500 family members">
           <article class="person-card card-margaret" data-person="Margaret Morgan"><div class="avatar avatar-rose">MM</div><div class="person-copy"><strong>Margaret Morgan</strong><span>1928 – 2013</span><em>Grandmother</em></div><button class="card-menu">•••</button></article>
           <article class="person-card card-arthur" data-person="Arthur Morgan"><div class="avatar avatar-blue">AM</div><div class="person-copy"><strong>Arthur Morgan</strong><span>1925 – 2008</span><em>Grandfather</em></div><button class="card-menu">•••</button></article>
           <article class="person-card card-elizabeth" data-person="Elizabeth Morgan"><div class="avatar avatar-lilac">EM</div><div class="person-copy"><strong>Elizabeth Morgan</strong><span>1952 – 2020</span><em>Mother</em></div><button class="card-menu">•••</button></article>
@@ -57,6 +57,6 @@
   <dialog id="person-dialog"><form method="dialog" id="person-form"><button class="dialog-close" value="cancel">×</button><span class="eyebrow">NEW CONNECTION</span><h2>Add family member</h2><p>Place someone new in the Morgan family tree.</p><label>Full name<input id="name-input" required placeholder="e.g. Jordan Morgan"></label><label>Relationship<select id="relation-input"><option>Parent</option><option>Sibling</option><option>Child</option><option>Partner</option><option>Grandparent</option></select></label><label>Birth date<input id="birth-input" type="date" required></label><div class="dialog-actions"><button class="button button-quiet" value="cancel">Cancel</button><button class="button button-dark" value="default">Add person</button></div></form></dialog>
   <section class="gallery-strip" id="gallery"><div><span class="eyebrow">FAMILY GALLERY</span><h2>Moments worth keeping</h2></div><div class="gallery-photos"><div class="gallery-photo photo-one"><span>Family tree portrait</span></div><div class="gallery-photo photo-two"><span>Christmas, 1998</span></div><div class="gallery-photo photo-three"><span>At the old house</span></div><button class="gallery-more">＋<small>Add memory</small></button></div></section>
   <aside class="help-panel" id="help-panel" aria-label="Kinship help assistant"><div class="help-panel-header"><div><span class="eyebrow">KINSHIP GUIDE</span><h2>How can I help?</h2></div><button class="help-close" id="help-close" aria-label="Close help">×</button></div><p class="help-intro">Ask about adding people, finding relatives, music, or your family archive.</p><div class="help-suggestions"><button data-question="How do I add someone?">Add someone</button><button data-question="Where are deleted people?">Deleted people</button><button data-question="How do I play music?">Play music</button></div><form id="help-form"><input id="help-input" placeholder="Ask Kinship..." autocomplete="off"><button type="submit" aria-label="Send question">↗</button></form><p class="help-answer" id="help-answer">I’m ready when you are.</p></aside>
-  <script src="script.js?v=500"></script>
+  <script src="script.js?v=501"></script>
 </body>
 </html>
