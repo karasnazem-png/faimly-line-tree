@@ -2,7 +2,7 @@ const dialog = document.querySelector('#person-dialog');
 const form = document.querySelector('#person-form');
 const canvas = document.querySelector('#tree-canvas');
 const zoomValue = document.querySelector('#zoom-value');
-let zoom = 1;
+let zoom = .75;
 let selectedCard = document.querySelector('.person-card.selected');
 let audioContext;
 let musicNodes;
@@ -65,7 +65,7 @@ function stopPanning(event) {
   dragState = null;
   treeStage.classList.remove('is-panning');
   if (event?.pointerId !== undefined && treeStage.hasPointerCapture(event.pointerId)) treeStage.releasePointerCapture(event.pointerId);
-  setTimeout(() => { didPan = false; }, 120);
+  setTimeout(() => { didPan = false; }, 0);
 }
 treeStage.addEventListener('pointerup', stopPanning);
 treeStage.addEventListener('pointercancel', stopPanning);
@@ -106,13 +106,13 @@ form.addEventListener('submit', (event) => {
   document.querySelector('.person-card.selected')?.classList.remove('selected');
   canvas.append(card);
   selectedCard = card;
-  card.addEventListener('click', () => { document.querySelector('.person-card.selected')?.classList.remove('selected'); card.classList.add('selected'); selectedCard = card; });
+  card.addEventListener('click', () => { if (!didPan) selectCard(card); });
   dialog.close(); form.reset();
 });
 document.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
 document.querySelector('#zoom-in').addEventListener('click', () => setZoom(zoom + .1));
 document.querySelector('#zoom-out').addEventListener('click', () => setZoom(zoom - .1));
-document.querySelector('#reset-view').addEventListener('click', () => setZoom(1));
+document.querySelector('#reset-view').addEventListener('click', () => setZoom(.75));
 document.querySelector('#share-tree').addEventListener('click', async (event) => {
   await navigator.clipboard?.writeText(window.location.href);
   const label = event.currentTarget.querySelector('span');
@@ -233,4 +233,5 @@ document.querySelector('#music-stop').addEventListener('click', stopMusic);
 window.addEventListener('pointerdown', (event) => {
   if (!event.target.closest('#music-toggle') && !musicNodes) startMusic({ currentTarget: document.querySelector('#music-toggle') });
 }, { once: true });
-function setZoom(value) { zoom = Math.min(1.3, Math.max(.8, value)); canvas.style.transform = `scale(${zoom})`; zoomValue.textContent = `${Math.round(zoom * 100)}%`; }
+function setZoom(value) { zoom = Math.min(1.2, Math.max(.55, value)); canvas.style.transform = `scale(${zoom})`; zoomValue.textContent = `${Math.round(zoom * 100)}%`; }
+setZoom(zoom);
