@@ -51,8 +51,12 @@ for (let index = 7; index < totalPeople; index += 1) {
   const initials = name.split(' ').map((part) => part[0]).join('').slice(0, 2);
   card.className = `person-card generated-card avatar-set-${index % 6}`;
   card.dataset.person = name;
-  card.style.left = `${24 + (index % 10) * 220}px`;
-  card.style.top = `${760 + Math.floor((index - 7) / 10) * 125}px`;
+  const branchColumn = index % 18;
+  const branchRow = Math.floor((index - 7) / 18);
+  const branchSpread = Math.min(9, branchRow + 2);
+  const branchOffset = branchColumn - 9;
+  card.style.left = `${1225 + branchOffset * 170 + (Math.abs(branchOffset) > branchSpread ? Math.sign(branchOffset) * 260 : 0)}px`;
+  card.style.top = `${760 + branchRow * 135}px`;
   card.innerHTML = `<div class="avatar">${initials}</div><div class="person-copy"><strong>${name}</strong><span>${1950 + index % 66}</span><em>${relationships[index % relationships.length]}</em></div><button class="card-menu">•••</button>`;
   canvas.append(card);
   bindPersonCard(card);
@@ -60,7 +64,7 @@ for (let index = 7; index < totalPeople; index += 1) {
 document.querySelector('.storage small').textContent = `${totalPeople} of ${totalPeople} people added`;
 document.querySelector('.storage-label span:last-child').textContent = '100%';
 document.querySelector('.storage-track span').style.width = '100%';
-canvas.style.height = `${760 + Math.ceil((totalPeople - 7) / 10) * 125}px`;
+canvas.style.height = `${760 + Math.ceil((totalPeople - 7) / 18) * 135}px`;
 treeStage.addEventListener('pointerdown', (event) => {
   if (event.button !== 0) return;
   dragState = { x: event.clientX, y: event.clientY, left: treeStage.scrollLeft, top: treeStage.scrollTop };
@@ -136,11 +140,6 @@ document.querySelector('#share-tree').addEventListener('click', async (event) =>
 });
 function deleteSelectedPerson() {
   if (!selectedCard || selectedCard.classList.contains('add-card')) return;
-  if (window.prompt('Owner code required to delete this person:') !== '6767') {
-    window.alert('That owner code is not correct.');
-    return;
-  }
-  if (!window.confirm(`Delete ${selectedCard.dataset.person} from this tree?`)) return;
   archivedPeople.unshift({
     name: selectedCard.dataset.person,
     initials: selectedCard.querySelector('.avatar').textContent,
@@ -214,10 +213,7 @@ function stopMusic() {
 function startMusic(event) {
   if (musicNodes) { stopMusic(); return; }
   const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-  if (!AudioContextClass) {
-    window.alert('Music is not supported in this browser. Try Chrome, Edge, or Safari.');
-    return;
-  }
+  if (!AudioContextClass) return;
   audioContext ??= new AudioContextClass();
   if (audioContext.state === 'suspended') audioContext.resume();
   const masterGain = audioContext.createGain();
