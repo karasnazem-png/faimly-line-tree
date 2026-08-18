@@ -3,14 +3,15 @@ const form = document.querySelector('#person-form');
 const canvas = document.querySelector('#tree-canvas');
 const zoomValue = document.querySelector('#zoom-value');
 let zoom = .75;
-let selectedCard = document.querySelector('.person-card.selected');
+let selectedCard = null;
 let audioContext;
 let musicNodes;
-const totalPeople = 500;
+const totalPeople = 0;
 const archivedPeople = JSON.parse(localStorage.getItem('kinship-archive') || '[]');
 const treeStage = document.querySelector('.tree-stage');
 let dragState = null;
 let didPan = false;
+document.querySelectorAll('.person-card:not(.add-card)').forEach((card) => card.remove());
 document.querySelector('#music-toggle').title = 'Play 10-track relaxing ambient music';
 document.querySelector('#music-toggle span').textContent = 'Relaxing';
 

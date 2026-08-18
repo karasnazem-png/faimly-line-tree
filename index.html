@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kinship | Family line tree</title>
+  <title>جيد faimly | Family line tree</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=507" />
+  <link rel="stylesheet" href="styles.css?v=508" />
 </head>
 <body>
   <main class="app-shell">
@@ -15,7 +15,7 @@
       <div class="brand"><span class="brand-mark">K</span><span>kinship</span></div>
       <div class="tree-switcher">
         <span class="eyebrow">YOUR TREES</span>
-        <button class="tree-select">The Morgan family <span>⌄</span></button><span class="public-badge">● Public tree</span>
+        <button class="tree-select">جيد faimly <span>⌄</span></button><span class="public-badge">● Public tree</span>
       </div>
       <nav class="nav-list" aria-label="Main navigation">
         <a class="nav-item active" href="#tree"><span class="nav-icon">⌘</span> Family tree</a>
@@ -32,13 +32,13 @@
     </aside>
 
     <section class="workspace" id="tree">
-      <header class="topbar"><div><span class="breadcrumb">TREES / MORGAN FAMILY</span><h1>Family tree</h1></div><div class="top-actions"><button class="music-button" id="music-toggle" title="Play relaxing music">♫ <span>Music</span></button><button class="music-stop" id="music-stop" title="Stop music">■ <span>Stop</span></button><button class="help-button" id="help-toggle" title="Open family tree help">✦ <span>Ask Kinship</span></button><button class="icon-button" title="Search">⌕</button><button class="icon-button" title="Notifications">♧</button><button class="button button-dark add-person-button" id="add-person"><span>＋</span> Add person</button></div></header>
+      <header class="topbar"><div><span class="breadcrumb">TREES / جيد FAIMLY</span><h1>جيد faimly</h1></div><div class="top-actions"><button class="music-button" id="music-toggle" title="Play relaxing music">♫ <span>Music</span></button><button class="music-stop" id="music-stop" title="Stop music">■ <span>Stop</span></button><button class="help-button" id="help-toggle" title="Open family tree help">✦ <span>Ask Kinship</span></button><button class="icon-button" title="Search">⌕</button><button class="icon-button" title="Notifications">♧</button><button class="button button-dark add-person-button" id="add-person"><span>＋</span> Add person</button></div></header>
       <div class="toolbar"><div class="view-tabs"><button class="tab active">Tree view</button><button class="tab">List view</button></div><div class="tree-tools"><span class="owner-badge">Owner: Alex Morgan</span><a class="gallery-link" href="#gallery">▧ Gallery</a><button class="tool-button" id="reset-view">⊙ <span>Center tree</span></button><div class="zoom-control"><button id="zoom-out">−</button><span id="zoom-value">100%</span><button id="zoom-in">＋</button></div><button class="share-button" id="share-tree">↗ <span>Share</span></button><button class="delete-toolbar" id="delete-person">⌫ Delete</button></div></div>
 
-      <section class="tree-stage" aria-label="Morgan family tree">
+      <section class="tree-stage" aria-label="جيد faimly tree">
         <div class="stage-grid"></div><div class="generation-label gen-one">GRANDPARENTS</div><div class="generation-label gen-two">PARENTS</div><div class="generation-label gen-three">YOU &amp; SIBLINGS</div>
         <svg class="connections" viewBox="0 0 1000 650" preserveAspectRatio="none" aria-hidden="true"><path d="M265 150 V218 H500 V245"/><path d="M735 150 V218 H500"/><path d="M500 335 V390 H245 V422"/><path d="M500 390 H755 V422"/><path d="M245 512 V550 H150 V568"/><path d="M245 550 H340 V568"/><path d="M755 512 V568"/></svg>
-        <div class="tree-background-photo" aria-hidden="true"></div><div class="pan-hint" aria-hidden="true">↔ Drag to explore the 500-person tree</div><div class="tree-canvas" id="tree-canvas" aria-label="500 family members">
+        <div class="tree-background-photo" aria-hidden="true"></div><div class="pan-hint" aria-hidden="true">↔ Drag to explore the family tree</div><div class="tree-canvas" id="tree-canvas" aria-label="جيد faimly members">
           <article class="person-card card-margaret" data-person="Margaret Morgan"><div class="avatar avatar-rose">MM</div><div class="person-copy"><strong>Margaret Morgan</strong><span>1928 – 2013</span><em>Grandmother</em></div><button class="card-menu">•••</button></article>
           <article class="person-card card-arthur" data-person="Arthur Morgan"><div class="avatar avatar-blue">AM</div><div class="person-copy"><strong>Arthur Morgan</strong><span>1925 – 2008</span><em>Grandfather</em></div><button class="card-menu">•••</button></article>
           <article class="person-card card-elizabeth" data-person="Elizabeth Morgan"><div class="avatar avatar-lilac">EM</div><div class="person-copy"><strong>Elizabeth Morgan</strong><span>1952 – 2020</span><em>Mother</em></div><button class="card-menu">•••</button></article>
@@ -58,6 +58,6 @@
   <section class="gallery-strip" id="gallery"><div><span class="eyebrow">FAMILY GALLERY</span><h2>Moments worth keeping</h2></div><div class="gallery-photos"><div class="gallery-photo photo-one"><span>Family tree portrait</span></div><div class="gallery-photo photo-two"><span>Christmas, 1998</span></div><div class="gallery-photo photo-three"><span>At the old house</span></div><button class="gallery-more">＋<small>Add memory</small></button></div></section>
   <aside class="help-panel" id="help-panel" aria-label="Kinship help assistant"><div class="help-panel-header"><div><span class="eyebrow">KINSHIP GUIDE</span><h2>How can I help?</h2></div><button class="help-close" id="help-close" aria-label="Close help">×</button></div><p class="help-intro">Ask about the family photo, adding people, finding relatives, music, or your archive.</p><div class="help-suggestions"><button data-question="What is in the family photo?">Read photo</button><button data-question="How do I add someone?">Add someone</button><button data-question="Where are deleted people?">Deleted people</button><button data-question="How do I play music?">Play music</button></div><form id="help-form"><input id="help-input" placeholder="Ask Kinship..." autocomplete="off"><button type="submit" aria-label="Send question">↗</button></form><p class="help-answer" id="help-answer">I’m ready when you are.</p></aside>
   <menu class="person-context-menu" id="person-context-menu"><li><button data-action="profile">◉ <span>View profile</span></button></li><li><button data-action="help">✦ <span>Ask Kinship about them</span></button></li><li class="context-danger"><button data-action="archive">⌫ <span>Archive person</span></button></li></menu>
-  <script src="script.js?v=506"></script>
+  <script src="script.js?v=508"></script>
 </body>
 </html>
