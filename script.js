@@ -23,8 +23,23 @@ function selectCard(card) {
   document.querySelector('.detail-panel').scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-document.querySelectorAll('.person-card:not(.add-card)').forEach((card) => {
+const contextMenu = document.querySelector('#person-context-menu');
+let contextCard;
+function bindPersonCard(card) {
   card.addEventListener('click', () => { if (!didPan) selectCard(card); });
+  card.addEventListener('contextmenu', (event) => {
+    event.preventDefault();
+    if (card.classList.contains('add-card')) return;
+    selectCard(card);
+    contextCard = card;
+    contextMenu.style.left = `${Math.min(event.clientX, window.innerWidth - 235)}px`;
+    contextMenu.style.top = `${Math.min(event.clientY, window.innerHeight - 165)}px`;
+    contextMenu.classList.add('open');
+  });
+}
+
+document.querySelectorAll('.person-card:not(.add-card)').forEach((card) => {
+  bindPersonCard(card);
 });
 
 const familyNames = ['Morgan', 'Hayes', 'Bennett', 'Ellis', 'Reed', 'Parker', 'Carter', 'Wells'];
@@ -40,7 +55,7 @@ for (let index = 7; index < totalPeople; index += 1) {
   card.style.top = `${760 + Math.floor((index - 7) / 10) * 125}px`;
   card.innerHTML = `<div class="avatar">${initials}</div><div class="person-copy"><strong>${name}</strong><span>${1950 + index % 66}</span><em>${relationships[index % relationships.length]}</em></div><button class="card-menu">•••</button>`;
   canvas.append(card);
-  card.addEventListener('click', () => { if (!didPan) selectCard(card); });
+  bindPersonCard(card);
 }
 document.querySelector('.storage small').textContent = `${totalPeople} of ${totalPeople} people added`;
 document.querySelector('.storage-label span:last-child').textContent = '100%';
@@ -140,6 +155,20 @@ function deleteSelectedPerson() {
 }
 document.querySelector('#delete-person').addEventListener('click', deleteSelectedPerson);
 document.querySelector('#delete-person-panel').addEventListener('click', deleteSelectedPerson);
+document.addEventListener('click', (event) => {
+  if (!event.target.closest('#person-context-menu')) contextMenu.classList.remove('open');
+});
+contextMenu.addEventListener('click', (event) => {
+  const action = event.target.closest('button')?.dataset.action;
+  if (!action || !contextCard) return;
+  if (action === 'profile') selectCard(contextCard);
+  if (action === 'help') {
+    helpPanel.classList.add('open');
+    helpAnswer.textContent = `I can help you learn about ${contextCard.dataset.person}. Their card shows their name, year, and family relationship.`;
+  }
+  if (action === 'archive') deleteSelectedPerson();
+  contextMenu.classList.remove('open');
+});
 const helpPanel = document.querySelector('#help-panel');
 const helpInput = document.querySelector('#help-input');
 const helpAnswer = document.querySelector('#help-answer');
