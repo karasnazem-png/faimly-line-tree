@@ -80,6 +80,15 @@ renderArchive();
 function openDialog() { dialog.showModal(); document.querySelector('#name-input').focus(); }
 document.querySelector('#add-person').addEventListener('click', openDialog);
 document.querySelector('#add-card').addEventListener('click', openDialog);
+function updatePreview() {
+  const name = document.querySelector('#name-input').value.trim() || 'New family member';
+  const initials = name === 'New family member' ? '?' : name.split(' ').map((part) => part[0]).join('').slice(0, 2).toUpperCase();
+  document.querySelector('#preview-avatar').textContent = initials;
+  document.querySelector('#preview-name').textContent = name;
+  document.querySelector('#preview-relation').textContent = document.querySelector('#relation-input').value;
+}
+document.querySelector('#name-input').addEventListener('input', updatePreview);
+document.querySelector('#relation-input').addEventListener('change', updatePreview);
 form.addEventListener('submit', (event) => {
   event.preventDefault();
   const name = document.querySelector('#name-input').value.trim();
@@ -138,7 +147,8 @@ const helpAnswers = [
   { matches: ['add', 'person', 'someone'], answer: 'Choose Add person in the top bar or the large card in the tree, then enter a name, relationship, and birth date.' },
   { matches: ['delet', 'archive', 'leader'], answer: 'Deleted members are remembered in the Family Archive at the bottom of the left sidebar. They stay there after removal.' },
   { matches: ['music', 'relax', 'sound'], answer: 'Press Relaxing in the top bar to start or stop the gentle ambient music.' },
-  { matches: ['find', 'search', 'relative'], answer: 'Use the tree scroll area to browse all 500 people, then select a card to see its details.' }
+  { matches: ['photo', 'picture', 'image', 'see'], answer: 'The family photo is used as the warm background behind the tree. The 500 family members stay as readable name cards on top, so the people are easy to find.' },
+  { matches: ['find', 'search', 'relative'], answer: 'Use the tree scroll area to browse all 500 people, then select a name card to see its details.' }
 ];
 function answerHelp(question) {
   const normalized = question.toLowerCase();
